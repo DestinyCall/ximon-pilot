@@ -1,0 +1,34 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO Client</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.7.2/socket.io.js"></script>
+  </head>
+  <body>
+    <h1>Socket.IO API Data</h1>
+    <div id="data-container"></div>
+
+    <script>
+      const socket = io('http://localhost:5000'); // Replace with your server URL
+
+      socket.on('connect', () => {
+        console.log('Web Client: Connected to server');
+        socket.emit('requestData'); // Request data from the server
+      });
+
+      socket.on('apiData', (data) => {
+        console.log('Received data:', data);
+        const dataContainer = document.getElementById('data-container');
+        dataContainer.innerHTML = `<pre>${JSON.stringify(data, null, 2)}</pre>`; // Display formatted JSON
+      });
+
+      socket.on('disconnect', () => {
+        console.log('Disconnected from server');
+      });
+
+      socket.on('error', (error) => {
+        console.error('Socket.IO Error:', error);
+      });
+    </script>
+  </body>
+</html>
